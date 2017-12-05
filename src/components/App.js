@@ -8,7 +8,7 @@ const App = () => {
   return (
     <div className="App">
       <header>
-        <img className="App main-header-logo" src="rock-rats-full-logo.png" alt="Rock Rats" />
+        <img className="App main-header-logo" src="sepp-banner.png" alt="SEPP" />
       </header>
 
       <Route exact path="/" component={BgsOverview}>

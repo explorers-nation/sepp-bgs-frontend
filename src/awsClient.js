@@ -21,7 +21,7 @@ class AwsClient {
 
   getOverview(callback) {
     this.db().scan({
-        TableName: 'rock-rat-factions',
+        TableName: 'sepp-factions',
         FilterExpression: '#entrydate >= :lastweek',
         ExpressionAttributeNames: {"#entrydate": "date"},
         ExpressionAttributeValues: {":lastweek": {S: this._lastWeek()}},
@@ -32,7 +32,7 @@ class AwsClient {
           console.error(err);
         } else {
 
-          this.db().scan({ TableName: 'rock-rat-systems' }, (err, systemData) => {
+          this.db().scan({ TableName: 'sepp-systems' }, (err, systemData) => {
             this._sendOverviewResponse(callback, systemData, factionData);
           });
         }

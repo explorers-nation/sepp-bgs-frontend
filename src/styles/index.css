@@ -2,13 +2,14 @@ body {
   margin: 0;
   padding: 20px;
   font-family: eurocaps;
-  background-color: rgba(255,224,0,0.06)
+  color: #feffff;
+  background-color: #030305;
 }
 
 /*table, th, td {*/
 /*}*/
 th {
-  background-color: orange;
+  background-color: #a0cce0;
 }
 
 tbody tr:nth-child(even) {

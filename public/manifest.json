@@ -1,6 +1,6 @@
 {
-  "short_name": "Rock Rats BGS",
-  "name": "Rock Rats BGS Viewer",
+  "short_name": "SEPP BGS",
+  "name": "SEPP BGS Viewer",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +10,6 @@
   ],
   "start_url": "./index.html",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#a6b8a",
+  "background_color": "#000000"
 }
