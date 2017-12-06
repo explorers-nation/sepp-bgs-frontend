@@ -20,29 +20,47 @@ class AwsClient {
   }
 
   getOverview(callback) {
-    this.db().scan({
-        TableName: 'sepp-factions',
-        FilterExpression: '#entrydate >= :lastweek',
-        ExpressionAttributeNames: {"#entrydate": "date"},
-        ExpressionAttributeValues: {":lastweek": {S: this._lastWeek()}},
-        Limit: 5000
-      },
-      (err, factionData) => {
-        if (err) {
-          console.error(err);
-        } else {
-
-          this.db().scan({ TableName: 'sepp-systems' }, (err, systemData) => {
-            this._sendOverviewResponse(callback, systemData, factionData);
-          });
-        }
+    this._fetchFactionData({Items: [], Count: 0, ScannedCount: 0}, 8, (err, factionData) => {
+      if (err) {
+        console.error(err);
+      } else {
+        this.db().scan({ TableName: 'sepp-systems' }, (err, systemData) => {
+          this._sendOverviewResponse(callback, systemData, factionData);
+        });
       }
-    );
+    });
   }
 
-  _lastWeek() {
+  _fetchFactionData(factionData, daysAgo, cb) {
+    this.db().query({
+      TableName: 'sepp-factions',
+      IndexName: 'date-index',
+      KeyConditionExpression: '#entrydate = :datestamp',
+      ExpressionAttributeNames: {"#entrydate": "date"},
+      ExpressionAttributeValues: {":datestamp": {S: this._daysAgo(daysAgo)}},
+      Limit: 5000
+    }, (err, data) => {
+      if (err) {
+        console.error(err);
+        cb(err);
+      } else {
+        const combinedData = {
+            Items: [...factionData.Items, ...data.Items],
+            Count: factionData.Count + data.Count,
+            ScannedCount: factionData.ScannedCount + data.ScannedCount,
+        };
+        if (daysAgo > 0) {
+          this._fetchFactionData(combinedData, daysAgo - 1, cb);
+        } else {
+          cb(null, combinedData);
+        }
+      }
+    });
+  }
+
+  _daysAgo(noOfDays) {
     const d = new Date();
-    d.setDate(d.getDate()-7);
+    d.setDate(d.getDate()-noOfDays);
     const lastWeek = '' +
       d.getUTCFullYear() + '-' +
       ('0' + (d.getUTCMonth() + 1)).slice(-2) + '-' +

@@ -10,6 +10,11 @@ body {
 /*}*/
 th {
   background-color: #a0cce0;
+  color: #009;
+}
+
+td {
+  color: #005;
 }
 
 tbody tr:nth-child(even) {
